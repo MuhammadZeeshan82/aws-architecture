@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('checkout') {
+            steps {
+              checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'jenkins-user-gitpipeline-repository', url: 'https://github.com/MuhammadZeeshan82/jenkins-terraform.git']]) 
+               
+            }
+        }
+        stage ("Terraform init"){
+         steps {
+            sh("terraform init");
+         }
+        }
+        stage ("Terraform Action"){
+           steps {
+            echo "Terraform action parameter is --> ${action}"
+            sh("terraform ${action} --auto-approve");
+            
+           }
+        }
+    } 
+}    
